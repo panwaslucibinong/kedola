@@ -1,11 +1,11 @@
-<% console.log('message:', message); %>
 <% if(message.length > 0){ %>
+  <script>
     Swal.fire({
       title: "<%= message[1] %>",
       text: "<%= message[2] %>",
       icon: "<%= message[0] %>",
-      timer: 1500,
-      showConfirmButton: false
+      showConfirmButton: false,
+      timer: 1500
     });
   </script>
 <% } %>
