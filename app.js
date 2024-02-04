@@ -70,6 +70,18 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
+app.get('/absen', authenticateUser, async (req, res) => {
+    try {
+        res.render('mt', {
+            layout: 'layouts/main-layout',
+            title: 'absen'
+        });
+    } catch (error) {
+        console.error('Error retrieving home data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 
 app.get('/laporan', authenticateUser, async (req, res) => {
     try {
@@ -78,6 +90,30 @@ app.get('/laporan', authenticateUser, async (req, res) => {
             layout: 'layouts/main-layout',
             title: 'Laporan',
             home_Data
+        });
+    } catch (error) {
+        console.error('Error retrieving home data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/info', authenticateUser, async (req, res) => {
+    try {
+        res.render('mt', {
+            layout: 'layouts/main-layout',
+            title: 'info'
+        });
+    } catch (error) {
+        console.error('Error retrieving home data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/user', authenticateUser, async (req, res) => {
+    try {
+        res.render('mt', {
+            layout: 'layouts/main-layout',
+            title: 'user'
         });
     } catch (error) {
         console.error('Error retrieving home data:', error);
