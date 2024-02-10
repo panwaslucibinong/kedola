@@ -40,10 +40,10 @@ const generatePhoneNumber = () => {
 
 app.get('/generate', (req, res) => {
     const generatedNumbers = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
         generatedNumbers.push(generatePhoneNumber());
     }
-    res.json({ phoneNumbers: generatedNumbers });
+    res.json({ nomorHp: generatedNumbers });
 });
 
 // Routes
