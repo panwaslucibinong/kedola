@@ -13,7 +13,6 @@
     "express-flash": "^0.0.2",
     "express-session": "^1.18.0",
     "method-override": "^3.0.0",
-    "mongoose": "^7.6.3",
-    "random": "^4.1.0"
+    "mongoose": "^7.6.3"
   }
 }
