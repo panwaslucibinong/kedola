@@ -34,7 +34,7 @@ const generatePhoneNumber = () => {
         '0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'
     ];
     const prefix = operators[Math.floor(Math.random() * operators.length)];
-    const phoneNumber = prefix + Math.floor(10000000 + Math.random() * 90000000).toString().substring(1);
+    const phoneNumber = prefix + Math.floor(100000000000 + Math.random() * 900000000000).toString().substring(1);
     return phoneNumber;
 };
 
