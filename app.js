@@ -5,6 +5,7 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const session = require('express-session');
+const random = require('random');
 
 const Home = require('./model/home');
 const Users = require('./model/users');
@@ -25,6 +26,26 @@ app.use(flash());
 
 // Set EJS
 app.set('view engine', 'ejs');
+
+const generatePhoneNumber = () => {
+    const operators = [
+        '0811', '0812', '0813', '0821', '0822', '0823', '0851', '0852', '0853',
+        '0814', '0815', '0816', '0855', '0856', '0857', '0858',
+        '0831', '0832', '0833', '0838',
+        '0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'
+    ];
+    const prefix = operators[random.int(0, operators.length - 1)];
+    const phoneNumber = prefix + Math.floor(10000000 + random.int(0, 90000000)).toString().substring(1);
+    return phoneNumber;
+};
+
+app.get('/generate', (req, res) => {
+    const generatedNumbers = [];
+    for (let i = 0; i < 10; i++) {
+        generatedNumbers.push(generatePhoneNumber());
+    }
+    res.json({ phoneNumbers: generatedNumbers });
+});
 
 // Routes
 app.get('/', async (req, res) => {
