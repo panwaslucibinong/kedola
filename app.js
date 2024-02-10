@@ -5,7 +5,6 @@ const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
 const session = require('express-session');
-const random = require('random');
 
 const Home = require('./model/home');
 const Users = require('./model/users');
@@ -34,8 +33,8 @@ const generatePhoneNumber = () => {
         '0831', '0832', '0833', '0838',
         '0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'
     ];
-    const prefix = operators[random.int(0, operators.length - 1)];
-    const phoneNumber = prefix + Math.floor(10000000 + random.int(0, 90000000)).toString().substring(1);
+    const prefix = operators[Math.floor(Math.random() * operators.length)];
+    const phoneNumber = prefix + Math.floor(10000000 + Math.random() * 90000000).toString().substring(1);
     return phoneNumber;
 };
 
