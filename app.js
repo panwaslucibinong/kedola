@@ -43,7 +43,7 @@ app.get('/generate', (req, res) => {
     for (let i = 0; i < 5; i++) {
         generatedNumbers.push(generatePhoneNumber());
     }
-    res.json({ nomorHp: generatedNumbers });
+    res.json(generatedNumbers);
 });
 
 // Routes
