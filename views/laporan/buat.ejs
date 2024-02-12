@@ -1,0 +1,138 @@
+<form method="POST" action="/lhp" class="mb-5">
+  <div class="container">
+    <div class="box">
+      <div style="justify-content: center; text-align: center;" class="mt-3">
+        <img src="/img/logo.png" alt="Icon" width="40">
+        <h2 class="mt-2 mb-0">Laporan Hasil Pengawasan</h2>
+        <p class="text-muted mb-3">Panitia Pengawas Pemilu</p>
+      </div>
+      <form>
+
+        <!-- Data Pengawas Pemilu -->
+        <div class="form-group mt-3">
+          <label for="no_lhp">Nomor LHP</label>
+          <input id="no_lhp" name="no_lhp" class="form-control" value="001/LHP/PM.01.02/02/2024" readonly>
+        </div>
+        <div class="form-group mt-3">
+          <label for="tahapan">Tahapan Yang Diawasi</label>
+          <select id="tahapan" class="form-select" name="tahapan" required>
+            <option value="" selected disabled hidden>Pilih Tahapan</option>
+            <option value="Pemungutan Dan Perhitungan Suara">Pemungutan Dan Perhitungan Suara</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="pelaksana_tugas">Pelaksana Tugas</label>
+          <input id="pelaksana_tugas" name="pelaksana_tugas" class="form-control" value="<%= dataUser.nama_pengawas %>" readonly>
+        </div>
+        <div class="form-group mt-3">
+          <label for="jabatan">Jabatan</label>
+          <input id="jabatan" name="jabatan" class="form-control" value="<%= dataUser.jabatan %> <%= dataUser.no_tps %> <%= dataUser.desa %>" readonly>
+        </div>
+        <div class="form-group mt-3">
+          <label for="no_surat">Nomor Surat Tugas</label>
+          <input id="no_surat" name="no_surat" class="form-control" value="001/LHP/PM.01.02/02/2024" readonly>
+        </div>
+        <input type="hidden" name="alamat" value="Kp. Ankola Rt.022 Rw.005 Desa Sukajadi Kecamatan Cibinong, Kabupaten Cianjur 43271">
+
+        <!-- Kegiatan Pengawasan -->
+        <div class="form-group mt-3">
+          <label for="bentuk_pengawasan">Bentuk Pengawasan</label>
+          <select id="bentuk_pengawasan" class="form-select" name="bentuk_pengawasan" required>
+            <option value="" selected disabled hidden>Pilih Bentuk Pengawasan</option>
+            <option value="Langsung">Langsung</option>
+            <option value="Tidak Langsung">Tidak Langsung</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="tujuan_pengawasan">Tujuan Pengawasan</label>
+          <textarea id="tujuan_pengawasan" class="form-control" name="tujuan_pengawasan" rows="2" value="" placeholder="Tulis tujuan pengawasan..." required></textarea>
+        </div>
+        <div class="form-group mt-3">
+          <label for="sasaran_pengawasan">Sasaran</label>
+          <select id="sasaran_pengawasan" class="form-select" name="sasaran_pengawasan" required>
+            <option value="" selected disabled hidden>Pilih Sasaran</option>
+              <option value="KPPS">KPPS</option>
+              <option value="Saksi">Saksi</option>
+              <option value="Saksi">Pemilih</option>
+              <option value="Saksi">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group mt-3">
+          <label for="waktu_pengawasan">Waktu dan Tempat Pengawasan</label>
+          <textarea id="waktu_pengawasan" class="form-control" name="waktu_pengawasan" rows="2" value="" required>Rabu, 14 Februari 2024 Pukul... Di TPS nomor... Desa ...</textarea>
+        </div>
+        <!-- Uraian Hasil Pengawasan -->
+        <div class="form-group mt-3">
+          <label for="uraian_pengawasan">Uraian Hasil Pengawasan</label>
+          <textarea id="uraian_pengawasan" class="form-control" name="uraian_pengawasan" rows="3" placeholder="Jelaskan detail pengawasan..." required></textarea>
+        </div>
+        <!-- waktu dibuat -->
+        <input type="hidden" name="waktu_dibuat" class="form-control" value="14 Februari 2024" required>
+        <div class="form-group mt-3">
+          <label for="customFile">Dokumentasi Kegiatan Max 100KB</label>
+          <input type="file" class="form-control" id="customFile" accept="image/*" value="" required />
+        </div>
+        <div class="mt-3 mb-4">
+          <button type="submit" class="custom-button" id="submitButton">Kirim Laporan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</form>
+<script>
+const fileInput = document.getElementById('customFile');
+fileInput.addEventListener('change', function() {
+  const selectedFile = fileInput.files[0];
+  if (selectedFile) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = function() {
+        const maxWidth = 800; // Lebar maksimum yang diizinkan
+        const maxHeight = 600; // Tinggi maksimum yang diizinkan
+        let newWidth = img.width;
+        let newHeight = img.height;
+
+        // Periksa dan atur ukuran gambar sesuai dengan batasan
+        if (img.width > maxWidth) {
+          newWidth = maxWidth;
+          newHeight = (img.height * maxWidth) / img.width;
+        }
+        if (newHeight > maxHeight) {
+          newHeight = maxHeight;
+          newWidth = (img.width * maxHeight) / img.height;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+        // Kompres gambar ke base64 dengan kualitas 0.7 (70%)
+        canvas.toBlob(
+          function(blob) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+              const base64String = event.target.result;
+              const dokumentasiUser = document.createElement('input');
+              dokumentasiUser.type = 'hidden';
+              dokumentasiUser.name = 'dokumentasi_foto';
+              dokumentasiUser.value = base64String;
+              document.querySelector('form').appendChild(dokumentasiUser);
+            };
+            canvas.toBlob(function(blob) {
+              reader.readAsDataURL(blob);
+            }, 'image/jpeg', 0.7); // Kualitas gambar 70%
+          },
+          'image/jpeg',
+          0.7 // Kualitas gambar 70%
+        );
+      };
+    };
+    reader.readAsDataURL(selectedFile);
+  }
+});
+</script>
