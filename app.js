@@ -26,26 +26,6 @@ app.use(flash());
 // Set EJS
 app.set('view engine', 'ejs');
 
-const generatePhoneNumber = () => {
-    const operators = [
-        '0811', '0812', '0813', '0821', '0822', '0823', '0851', '0852', '0853',
-        '0814', '0815', '0816', '0855', '0856', '0857', '0858',
-        '0831', '0832', '0833', '0838',
-        '0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'
-    ];
-    const prefix = operators[Math.floor(Math.random() * operators.length)];
-    const phoneNumber = prefix + Math.floor(100000000000 + Math.random() * 900000000000).toString().substring(1);
-    return phoneNumber;
-};
-
-app.get('/generate', (req, res) => {
-    const generatedNumbers = [];
-    for (let i = 0; i < 5; i++) {
-        generatedNumbers.push(generatePhoneNumber());
-    }
-    res.json(generatedNumbers);
-});
-
 // Routes
 app.get('/', async (req, res) => {
     try {
@@ -90,6 +70,23 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
+app.get('/user', authenticateUser, async (req, res) => {
+    const kodeAktivasi = req.cookies.kode_login;
+    const dataUser = await Users.findOne({ kode_login: kodeAktivasi });
+    console.log(dataUser)
+    try {
+        res.render('users/profil', {
+            layout: 'layouts/main-layout',
+            title: 'user',
+            dataUser
+
+        });
+    } catch (error) {
+        console.error('Error retrieving home data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.get('/absen', authenticateUser, async (req, res) => {
     try {
         res.render('mt', {
@@ -129,17 +126,7 @@ app.get('/info', authenticateUser, async (req, res) => {
     }
 });
 
-app.get('/user', authenticateUser, async (req, res) => {
-    try {
-        res.render('mt', {
-            layout: 'layouts/main-layout',
-            title: 'user'
-        });
-    } catch (error) {
-        console.error('Error retrieving home data:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
+
 
 // Handle halaman tidak ditemukan
 app.use((req, res) => {

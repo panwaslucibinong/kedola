@@ -4,11 +4,19 @@ const Users = mongoose.model('Users', {
         type: String,
         required: true
     },
+    jabatan: {
+        type: String,
+        required: true
+    },
     no_tps: {
         type: String,
         required: true
     },
     desa: {
+        type: String,
+        required: true
+    },
+    kecamatan: {
         type: String,
         required: true
     },
