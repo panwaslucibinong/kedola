@@ -9,6 +9,7 @@ const session = require('express-session');
 const Home = require('./model/home');
 const Users = require('./model/users');
 const authenticateUser = require('./model/authMiddleware');
+const LaporanHasilPengawasan = require('./model/laporan_hasil_pengawasan')
 
 require('./utils/db');
 
@@ -65,6 +66,43 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.get('/lhp/add', authenticateUser, async (req, res) => {
+    const kodeAktivasi = req.cookies.kode_login;
+    const dataUser = await Users.findOne({ kode_login: kodeAktivasi })
+    res.render('laporan/buat', {
+        layout: 'layouts/main-layout',
+        title: 'user',
+        dataUser
+
+    });
+});
+
+app.post('/lhp', authenticateUser, async (req, res) => {
+    try {
+        const newLhp = new LaporanHasilPengawasan(req.body);
+        await newLhp.save();
+        req.flash("message", ["success", "Laporan", "Login sukses"]);
+        res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
+    } catch (error) {
+        console.log("gagal")
+        req.flash("message", ["success", "Laporan", "Login sukses"]);
+        res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
+    }
+});
+
+app.get('/notif', authenticateUser, async (req, res) => {
+    try {
+        res.render('notif', {
+            layout: 'layouts/main-layout',
+            title: 'Notif',
+            message: req.flash("message")
+        });
+    } catch (error) {
+        console.error('Error retrieving home data:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.get('/logout', (req, res) => {
     res.clearCookie('kode_login');
     res.redirect('/login');
@@ -73,7 +111,6 @@ app.get('/logout', (req, res) => {
 app.get('/user', authenticateUser, async (req, res) => {
     const kodeAktivasi = req.cookies.kode_login;
     const dataUser = await Users.findOne({ kode_login: kodeAktivasi });
-    console.log(dataUser)
     try {
         res.render('users/profil', {
             layout: 'layouts/main-layout',
