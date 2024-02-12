@@ -79,14 +79,31 @@ app.get('/lhp/add', authenticateUser, async (req, res) => {
 
 app.post('/lhp', authenticateUser, async (req, res) => {
     try {
-        const newLhp = new LaporanHasilPengawasan(req.body);
-        await newLhp.save();
-        req.flash("message", ["success", "Laporan", "Berhasil Terkirim"]);
-        res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
+        const kodeAktivasi = req.cookies.kode_login;
+        const dataUser = await Users.findOne({ kode_login: kodeAktivasi })
+        const jabatanUser = `${dataUser.jabatan} ${dataUser.no_tps} ${dataUser.desa}`
+        const existingLhp = await LaporanHasilPengawasan.findOne({ pelaksana_tugas: dataUser.nama_pengawas, jabatan: jabatanUser});
+        if (existingLhp) {
+            // Jika laporan sudah ada, update dengan data baru
+            existingLhp.field1 = req.body.field1; // Ganti field1 dengan nama field yang sesuai
+            existingLhp.field2 = req.body.field2; // Ganti field2 dengan nama field yang sesuai
+            // Lanjutkan dengan semua field yang perlu diupdate
+
+            await existingLhp.save();
+            req.flash("message", ["success", "Laporan", "Berhasil Diperbarui"]);
+        } else {
+            // Jika laporan belum ada, buat laporan baru
+            const newLhp = new LaporanHasilPengawasan(req.body);
+            newLhp.kode_login = kodeAktivasi; // Pastikan untuk menambahkan kode_login ke laporan baru
+            await newLhp.save();
+            req.flash("message", ["success", "Laporan", "Berhasil Terkirim"]);
+        }
+
+        res.redirect('/notif'); // Ubah /notif dengan URL yang sesuai
     } catch (error) {
-        console.log("gagal")
+        console.log("gagal", error);
         req.flash("message", ["error", "Laporan", "Gagal Terkirim"]);
-        res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
+        res.redirect('/notif'); // Ubah /notif dengan URL yang sesuai
     }
 });
 
