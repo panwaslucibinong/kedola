@@ -81,11 +81,11 @@ app.post('/lhp', authenticateUser, async (req, res) => {
     try {
         const newLhp = new LaporanHasilPengawasan(req.body);
         await newLhp.save();
-        req.flash("message", ["success", "Laporan", "Login sukses"]);
+        req.flash("message", ["success", "Laporan", "Berhasil Terkirim"]);
         res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
     } catch (error) {
         console.log("gagal")
-        req.flash("message", ["success", "Laporan", "Login sukses"]);
+        req.flash("message", ["error", "Laporan", "Gagal Terkirim"]);
         res.redirect('/notif'); // Ubah /laporan/berhasil dengan URL yang sesuai
     }
 });
