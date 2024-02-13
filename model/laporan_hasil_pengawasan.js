@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
 
-// Buat skema untuk Laporan Hasil Pengawasan
+// Fungsi untuk mendapatkan waktu saat ini dalam format yang diinginkan
+function getCurrentTimeIndonesia() {
+    return moment().tz('Asia/Jakarta').format('DD MMMM YYYY [jam] HH:mm:ss');
+}
+
+// Skema untuk Laporan Hasil Pengawasan
 const lhpSchema = new mongoose.Schema({
     no_lhp: {
         type: String,
@@ -48,7 +54,7 @@ const lhpSchema = new mongoose.Schema({
     },
     waktu_dibuat: {
         type: String,
-        required: true,
+        default: getCurrentTimeIndonesia
     },
     dokumentasi_foto: {
         type: String,
@@ -56,7 +62,7 @@ const lhpSchema = new mongoose.Schema({
     },
 });
 
-// Buat model dari skema di atas
+// Model dari skema di atas
 const LaporanHasilPengawasan = mongoose.model('lhp', lhpSchema);
 
 module.exports = LaporanHasilPengawasan;
