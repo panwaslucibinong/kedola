@@ -1,0 +1,27 @@
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner mb-3">
+    <div class="carousel-item active">
+      <img src="img/slide1.png" class="d-block w-100 rounded" alt="Banner Utama">
+    </div>
+    <% home_Data.banner.forEach((myBanner, i) => { %>
+      <div class="carousel-item">
+        <img src="<%= myBanner.banner_Link %>" class="d-block w-100 rounded" alt="<%= myBanner.banner_Title %>">
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<div class="row g-2 mb-2">
+  <% home_Data.card2.forEach((myCard, i) => { %>
+    <div class="col-4 col-md-2">
+      <div class="card catagory-card h-100 shadow-sm" onmouseover="this.style.backgroundColor='#EBF1F1'" onmouseout="this.style.backgroundColor='';">
+        <a class="text-danger no-underline" style="text-decoration: none;" href="<%= myCard.card_Link %>">
+            <div class="card-body text-center">
+              <i class="<%= myCard.card_Icon %>" style="font-size: 30px;"></i>
+              <h6 class="card-title text-muted" style="font-size: 13px;"><%= myCard.card_Title %></h6>
+            </div>
+        </a>
+      </div>
+    </div>
+  <% }) %>
+</div>

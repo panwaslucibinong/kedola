@@ -1,0 +1,70 @@
+
+<div class="container">
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col col-md-9 col-lg-7 col-xl-5">
+      <div class="card" style="border-radius: 15px;">
+        <div class="card-body p-1">
+          <div class="d-flex text-black">
+            <div class="flex-shrink-0">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                alt="Generic placeholder image" class="img-fluid"
+                style="width: 115px; border-radius: 10px;">
+            </div>
+            <div class="flex-grow-1 ms-3">
+              <h5 class="mb-1"><%= dataUser.nama_pengawas %></h5>
+              <p class="small text-muted mb-1"><%= dataUser.jabatan %> <%= dataUser.no_tps %> <%= dataUser.desa %>_<%= dataUser.kecamatan %></p>
+              <div class="d-flex justify-content-start rounded-3 p-2 mb-1"
+                style="background-color: #efefef;">
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <p class="small text-muted mb-1"><i class="bi bi-file-text"></i> Laporan</p>
+                    <p class="mb-0">0</p>
+                  </div>
+                  <div class="px-3">
+                    <p class="small text-muted mb-1"><i class="bi bi-check-square text-success"></i> Selesai</p>
+                    <p class="mb-0">0</p>
+                  </div>
+                  <div>
+                    <p class="small text-muted mb-1"><i class="bi bi-exclamation-square text-danger"></i> Belum</p>
+                    <p class="mb-0">0</p>
+                  </div>
+                </div>                              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container mt-2">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link" id="absen-dprd-kab-tab" data-toggle="tab" href="#absen-dprd-kab" role="tab" aria-controls="absen-dprd-kab" aria-selected="false" style="font-size: smaller;">DPRD KAB</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="absen-dprd-kab-tab" data-toggle="tab" href="#absen-dprd-kab" role="tab" aria-controls="absen-dprd-kab" aria-selected="false" style="font-size: smaller;">DPRD KAB</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="absen-dprd-kab-tab" data-toggle="tab" href="#absen-dprd-kab" role="tab" aria-controls="absen-dprd-kab" aria-selected="false" style="font-size: smaller;">DPRD KAB</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="absen-dprd-kab-tab" data-toggle="tab" href="#absen-dprd-kab" role="tab" aria-controls="absen-dprd-kab" aria-selected="false" style="font-size: smaller;">DPRD KAB</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="lhp" role="tabpanel" aria-labelledby="lhp-tab">
+      <table class="table align-middle mb-5 bg-white">
+        <thead>
+          <tr>
+            <th>Nomor</th>
+            <th>Dibuat</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <!-- Konten tabel disini -->
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

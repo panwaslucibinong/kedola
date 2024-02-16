@@ -1,0 +1,19 @@
+table{
+  font-size: 1.5vmax;
+}
+tbody {
+  font-size: 1.2vmax;
+}
+
+#filterDesaBtn{
+  background-color: #FFE4A7;
+  font-size: 1.5vmax;
+}
+tbody tr:hover {
+  background-color: #e0e0e0;
+  /* cursor: pointer; */
+}
+.table img {
+  width: 4.5vmax;
+  height: 4.5vmax;
+}
