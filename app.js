@@ -169,7 +169,7 @@ app.get('/laporan', authenticateUser, async (req, res) => {
     }
 });
 
-app.get('/info/:desa', authenticateUser, async (req, res) => {
+app.get('/info/:desa', async (req, res) => {
     try {
         const desaku = req.params.desa.toUpperCase();
         const response = await axios.get(`https://s.aawasra-bawaslu.my.id/vote/progress/CIBINONG/${desaku}`);
