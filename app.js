@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
@@ -168,11 +169,17 @@ app.get('/laporan', authenticateUser, async (req, res) => {
     }
 });
 
-app.get('/info', authenticateUser, async (req, res) => {
+app.get('/info/:desa', authenticateUser, async (req, res) => {
     try {
-        res.render('mt', {
+        const desaku = req.params.desa.toUpperCase();
+        const response = await axios.get(`https://s.aawasra-bawaslu.my.id/vote/progress/CIBINONG/${desaku}`);
+        const data = response.data;
+
+        res.render('info', {
             layout: 'layouts/main-layout',
-            title: 'info'
+            title: 'info',
+            data: data,
+            desa: desaku
         });
     } catch (error) {
         console.error('Error retrieving home data:', error);
