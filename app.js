@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
@@ -168,12 +167,16 @@ app.get('/laporan', authenticateUser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
 app.get('/info/:desa', authenticateUser, async (req, res) => {
     try {
         const desaku = req.params.desa.toUpperCase();
-        const response = await axios.get(`https://s.aawasra-bawaslu.my.id/vote/progress/CIBINONG/${desaku}`);
-        const data = response.data;
+        const response = await fetch(`https://s.aawasra-bawaslu.my.id/vote/progress/CIBINONG/${desaku}`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
+        
+        const data = await response.json();
 
         res.render('info', {
             layout: 'layouts/main-layout',
@@ -186,6 +189,7 @@ app.get('/info/:desa', authenticateUser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 
 
