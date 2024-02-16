@@ -1,0 +1,19 @@
+<table class="table mb-5">
+    <thead>
+      <tr>
+        <th scope="col">Nomor TPS</th>
+        <th scope="col">Progress</th>
+        <th scope="col">Kelengkapan Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach(function(item) { %>
+        <tr>
+          <td><%= desa.toLowerCase() %> <%= item.tpsNumber %></td>
+          <td><%= item.datas.join(', ') || 'belum ada progress' %></td>
+          <td><%= item.datas.length > 0 ? 'Lengkap' : 'Belum Lengkap' %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+</table>
+  
