@@ -134,7 +134,7 @@ app.get('/user', authenticateUser, async (req, res) => {
     if (existingLhp) {
         const jumlahLaporan = 1
     }else{
-        const jumlahLaporan = 0
+        const jumlahLaporan = 4
     try {
         res.render('users/profil', {
             layout: 'layouts/main-layout',
