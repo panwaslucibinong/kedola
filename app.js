@@ -140,8 +140,8 @@ app.get('/user', authenticateUser, async (req, res) => {
             layout: 'layouts/main-layout',
             title: 'user',
             dataUser,
-            jumlahLaporan
-
+            jumlahLaporan,
+            message: req.flash("message")
         });
     } catch (error) {
         console.error('Error retrieving home data:', error);
