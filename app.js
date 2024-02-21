@@ -174,22 +174,11 @@ app.get('/laporan', authenticateUser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-app.get('/info/:desa', authenticateUser, async (req, res) => {
+app.get('/info', authenticateUser, async (req, res) => {
     try {
-        const desaku = req.params.desa.toUpperCase();
-        const response = await fetch(`https://s.aawasra-bawaslu.my.id/vote/progress/CIBINONG/${desaku}`);
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch data');
-        }
-        
-        const data = await response.json();
-
-        res.render('info', {
+        res.render('mt', {
             layout: 'layouts/main-layout',
-            title: 'info',
-            data: data,
-            desa: desaku
+            title: 'info'
         });
     } catch (error) {
         console.error('Error retrieving home data:', error);
