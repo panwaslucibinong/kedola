@@ -99,11 +99,11 @@ app.post('/lhp', authenticateUser, async (req, res) => {
             req.flash("message", ["success", "Laporan", "Berhasil Terkirim"]);
         }
 
-        res.redirect('/notif'); // Ubah /notif dengan URL yang sesuai
+        res.redirect('/profil'); // Ubah /notif dengan URL yang sesuai
     } catch (error) {
         console.log("gagal", error);
         req.flash("message", ["error", "Laporan", "Gagal Terkirim"]);
-        res.redirect('/notif'); // Ubah /notif dengan URL yang sesuai
+        res.redirect('/profil'); // Ubah /notif dengan URL yang sesuai
     }
 });
 
