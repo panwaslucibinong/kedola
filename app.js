@@ -1,5 +1,7 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
+const multer  = require('multer');
+const { google } = require('googleapis');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
@@ -77,6 +79,11 @@ app.get('/lhp/add', authenticateUser, async (req, res) => {
     });
 });
 
+const oauth2Client = new google.auth.OAuth2(
+  1097586486884-lc28noobbkibkva1h6i54tjho2rhruhn.apps.googleusercontent.com,
+  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,
+  https://cibinong.online
+);
 // Inisialisasi Google Drive API
 const drive = google.drive({
   version: 'v3',
