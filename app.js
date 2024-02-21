@@ -72,7 +72,8 @@ app.get('/lhp/add', authenticateUser, async (req, res) => {
     res.render('laporan/buat', {
         layout: 'layouts/main-layout',
         title: 'user',
-        dataUser
+        dataUser,
+        message: req.flash("message")
 
     });
 });
