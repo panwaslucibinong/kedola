@@ -1,7 +1,5 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-const multer  = require('multer');
-const { google } = require('googleapis');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
@@ -79,99 +77,33 @@ app.get('/lhp/add', authenticateUser, async (req, res) => {
     });
 });
 
-const oauth2Client = new google.auth.OAuth2(
-  1097586486884-lc28noobbkibkva1h6i54tjho2rhruhn.apps.googleusercontent.com,
-  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,
-  https://cibinong.online
-);
-// Inisialisasi Google Drive API
-const drive = google.drive({
-  version: 'v3',
-  auth: oauth2Client,
-});
+app.post('/lhp', authenticateUser, async (req, res) => {
+    try {
+        const kodeAktivasi = req.cookies.kode_login;
+        const dataUser = await Users.findOne({ kode_login: kodeAktivasi })
+        const jabatanUser = `${dataUser.jabatan} ${dataUser.no_tps} ${dataUser.desa}`
+        const existingLhp = await LaporanHasilPengawasan.findOne({ pelaksana_tugas: dataUser.nama_pengawas, jabatan: jabatanUser});
+        if (existingLhp) {
+            // Jika laporan sudah ada, update dengan data baru
+            existingLhp.field1 = req.body.field1; // Ganti field1 dengan nama field yang sesuai
+            existingLhp.field2 = req.body.field2; // Ganti field2 dengan nama field yang sesuai
+            // Lanjutkan dengan semua field yang perlu diupdate
 
-// Konfigurasi Multer untuk menangani unggahan file
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Menyimpan file di folder 'uploads'
-  },
-  filename: function (req, file, cb) {
-    // Menggunakan nama file sesuai dengan data pengguna
-    const dataUser = req.userData;
-    const fileName = `${dataUser.jabatan} ${dataUser.no_tps} ${dataUser.desa}${path.extname(file.originalname)}`;
-    cb(null, fileName);
-  },
-});
-
-const upload = multer({ storage: storage });
-
-// Endpoint untuk mengunggah foto ke Google Drive
-app.post('/upload', upload.single('photo'), function (req, res) {
-  const fileMetadata = {
-    name: req.file.filename,
-  };
-
-  const media = {
-    mimeType: req.file.mimetype,
-    body: fs.createReadStream(req.file.path),
-  };
-
-  drive.files.create(
-    {
-      resource: fileMetadata,
-      media: media,
-      fields: 'id',
-    },
-    (err, file) => {
-      if (err) {
-        console.error('Error uploading file:', err);
-        res.status(500).send('Error uploading file to Google Drive.');
-      } else {
-        console.log('File uploaded successfully, File Id:', file.data.id);
-        res.status(200).send('File uploaded successfully to Google Drive.');
-      }
+            await existingLhp.save();
+            req.flash("message", ["success", "Laporan", "Berhasil Diperbarui"]);
+        } else {
+            // Jika laporan belum ada, buat laporan baru
+            const newLhp = new LaporanHasilPengawasan(req.body);
+            newLhp.kode_login = kodeAktivasi; // Pastikan untuk menambahkan kode_login ke laporan baru
+            await newLhp.save();
+            req.flash("message", ["success", "Laporan", "Berhasil Terkirim"]);
+        }
+        res.redirect('/users/profil'); // Ubah /notif dengan URL yang sesuai
+    } catch (error) {
+        console.log("gagal", error);
+        req.flash("message", ["error", "Laporan", "Gagal Terkirim"]);
+        res.redirect('/users/profil'); // Ubah /notif dengan URL yang sesuai
     }
-  );
-});
-
-// Endpoint untuk mengelola laporan hasil pengawasan
-app.post('/lhp', authenticateUser, upload.single('photo'), async (req, res) => {
-  try {
-    const kodeAktivasi = req.cookies.kode_login;
-    const dataUser = await Users.findOne({ kode_login: kodeAktivasi });
-    const jabatanUser = `${dataUser.jabatan} ${dataUser.no_tps} ${dataUser.desa}`;
-    const existingLhp = await LaporanHasilPengawasan.findOne({
-      pelaksana_tugas: dataUser.nama_pengawas,
-      jabatan: jabatanUser,
-    });
-    if (existingLhp) {
-      // Jika laporan sudah ada, update dengan data baru
-      existingLhp.field1 = req.body.field1; // Ganti field1 dengan nama field yang sesuai
-      existingLhp.field2 = req.body.field2; // Ganti field2 dengan nama field yang sesuai
-      // Lanjutkan dengan semua field yang perlu diupdate
-
-      await existingLhp.save();
-      req.flash('message', ['success', 'Laporan', 'Berhasil Diperbarui']);
-    } else {
-      // Jika laporan belum ada, buat laporan baru
-      const newLhp = new LaporanHasilPengawasan(req.body);
-      newLhp.kode_login = kodeAktivasi; // Pastikan untuk menambahkan kode_login ke laporan baru
-
-      // Cek jika ada file yang diunggah
-      if (req.file) {
-        // Jika ada, tambahkan informasi file ke laporan baru
-        newLhp.fileUrl = req.file.filename; // Ganti fileUrl dengan nama field yang sesuai
-      }
-
-      await newLhp.save();
-      req.flash('message', ['success', 'Laporan', 'Berhasil Terkirim']);
-    }
-    res.redirect('/users/profil'); // Ubah /notif dengan URL yang sesuai
-  } catch (error) {
-    console.log('gagal', error);
-    req.flash('message', ['error', 'Laporan', 'Gagal Terkirim']);
-    res.redirect('/users/profil'); // Ubah /notif dengan URL yang sesuai
-  }
 });
 
 app.get('/notif', authenticateUser, async (req, res) => {
