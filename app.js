@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
 const methodOverride = require('method-override');
@@ -132,9 +131,10 @@ app.get('/user', authenticateUser, async (req, res) => {
     const jabatanUser = `${dataUser.jabatan} ${dataUser.no_tps} ${dataUser.desa}`
     const existingLhp = await LaporanHasilPengawasan.findOne({ pelaksana_tugas: dataUser.nama_pengawas, jabatan: jabatanUser});
     if (existingLhp) {
-        const jumlahLaporan = 1
+        jumlahLaporan = 1
     }else{
-        const jumlahLaporan = 4
+        jumlahLaporan = 0
+    }
     try {
         res.render('users/profil', {
             layout: 'layouts/main-layout',
@@ -197,9 +197,6 @@ app.get('/info/:desa', authenticateUser, async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-
-
 
 // Handle halaman tidak ditemukan
 app.use((req, res) => {
