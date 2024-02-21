@@ -59,7 +59,7 @@ app.post("/login", async (req, res) => {
         const kamuAdalah = user.nama_pengawas
         res.cookie('kode_login', kodeAktivasi, { maxAge: 365 * 24 * 60 * 60 * 1000 });
         req.flash("message", ["success", kamuAdalah, "Login sukses"]);
-        res.redirect("/");
+        res.redirect("/lhp/add");
     } else {
         req.flash("message", ["error", "Belum Terdaftar Di Sistem Kami !!!", "Login gagal"]);
         res.redirect("/login");
